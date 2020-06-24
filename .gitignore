@@ -1,0 +1,17 @@
+
+venv/
+.history/
+__pycache__/
+.idea/
+logs/celery.log
+celerybeat-schedule
+.vscode/
+setup.cfg
+.env
+**/logs/**
+!**/logs
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+.DS_Store
+celerybeat.pid

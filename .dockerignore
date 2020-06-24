@@ -1,0 +1,7 @@
+Dockerfile
+docker-compose.yml
+.gitignore
+.history/
+__pycache__/
+.idea/
+.vscode/
