@@ -43,7 +43,7 @@ phone_regex = RegexValidator(
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(
-        _('email address'), null=True, blank=True)
+        _('email address'), null=True, blank=True, unique=True)
     password = models.CharField(max_length=255, null=True)
     firstname = models.CharField(max_length=255, blank=True, null=True)
     lastname = models.CharField(max_length=255, blank=True, null=True)

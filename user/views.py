@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.authtoken.views import ObtainAuthToken
 from django.utils.crypto import get_random_string
 from django_filters.rest_framework import DjangoFilterBackend
-from user.models import User, Token, TempUser, Follow, Profile
+from user.models import User, Token
 from user.permissions import IsAdmin
 from .serializers import (UserSerializer, RegisterVerifySerializer, AuthTokenSerializer, CustomObtainTokenPairSerializer,
                           PasswordResetChangeSerializer, PasswordResetSerializer, PasswordResetVerifySerializer)

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'channels',
     'corsheaders',
     'storages',
     'rest_framework',
@@ -88,6 +89,7 @@ TEMPLATES = [
 # CUSTOM USER MODEL
 AUTH_USER_MODEL = "user.User"
 WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.routing.application'
 CORS_ORIGIN_ALLOW_ALL = True
 
 
@@ -148,7 +150,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
     'TEST_REQUEST_DEFAULT_FORMAT': 'json',
@@ -276,6 +277,17 @@ TOKEN_LIFESPAN = 24  # hours
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379")
 FLOWER_BASIC_AUTH = os.environ.get('FLOWER_BASIC_AUTH')
+
+REDIS_URL = os.getenv('REDIS_URL', "redis://redis:6379")
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL],
+        },
+    },
+}
 
 CELERY_BEAT_SCHEDULE = {
     # "sample_task": {
