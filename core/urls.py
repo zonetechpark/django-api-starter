@@ -35,14 +35,14 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    url(r'^api/v2/api-doc(?P<format>\.json|\.yaml)$', schema_view.without_ui(
+    url(r'^api/v1/api-doc(?P<format>\.json|\.yaml)$', schema_view.without_ui(
         cache_timeout=0), name='schema-json'),
-    url(r'^api/v2/api-doc/$', schema_view.with_ui('swagger',
+    url(r'^api/v1/api-doc/$', schema_view.with_ui('swagger',
                                                   cache_timeout=0), name='schema-swagger-ui'),
-    url(r'^api/v2/api-redoc/$', schema_view.with_ui('redoc',
+    url(r'^api/v1/api-redoc/$', schema_view.with_ui('redoc',
                                                     cache_timeout=0), name='schema-redoc'),
-    url(r'api/v2/accounts/', include('allauth.urls')),
-    path('api/v2/api-auth/', include('rest_framework.urls')),
+    url(r'api/v1/accounts/', include('allauth.urls')),
+    path('api/v1/api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
-    # path('api/v2/auth/', include('user.urls')),
+    path('api/v1/auth/', include('user.urls')),
 ]
