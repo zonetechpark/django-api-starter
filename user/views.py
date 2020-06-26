@@ -4,10 +4,11 @@ from rest_framework.decorators import action
 from rest_framework import filters, permissions
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
-from django.contrib.auth import get_user_model, logout
+from django.contrib.auth import get_user_model, logout, login
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
-from rest_framework import viewsets, status, generics
+from rest_framework import viewsets, status, generics, views
+from django.contrib.auth.forms import AuthenticationForm
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -23,6 +24,24 @@ from .serializers import (UserSerializer, RegisterVerifySerializer, AuthTokenSer
 class SignUpView(generics.CreateAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = UserSerializer
+
+
+class LogiInView(views.APIView):
+    def post(self, request):
+        form = AuthenticationForm(data=request.data)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user=user)
+            return Response(UserSerializer(user).data)
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class LogOutView(views.APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def post(self, *args, **kwargs):
+        logout(self.request)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserViewsets(viewsets.ModelViewSet):
