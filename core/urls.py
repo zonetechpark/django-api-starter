@@ -29,7 +29,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="daniel.ale@zonetechpark.co"),
         license=openapi.License(name="BSD License"),
     ),
-    url='https://resumes-api.toptalent.io/api/v1/',
+    # url='https://resumes-api.toptalent.io/api/v1/',
     public=True,
     permission_classes=(permissions.AllowAny,),
 )

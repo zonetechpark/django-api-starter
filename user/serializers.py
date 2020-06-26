@@ -42,6 +42,9 @@ class UserSerializer(serializers.ModelSerializer):
         except EmailNotValidError as e:
             raise serializers.ValidationError(e)
 
+    def create(self, validated_data):
+        return self.Meta.model.objects.create_user(**validated_data)
+
     def update(self, instance, validated_data):
         user = self.context['request'].user
         instance = super().update(instance, validated_data)

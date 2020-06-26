@@ -9,11 +9,10 @@ PASSWORD = 'pAssw0rd!'
 class AuthenticationTest(APITestCase):
     def test_user_can_sign_up(self):
         response = self.client.post(reverse('sign_up'), data={
-            'username': 'user@example.com',
+            'email': 'user@example.com',
             'firstname': 'Test',
             'lastname': 'User',
-            'password1': PASSWORD,
-            'password2': PASSWORD
+            'password': PASSWORD,
         })
         user = get_user_model().objects.last()
         self.assertEqual(status.HTTP_201_CREATED, response.status_code)
