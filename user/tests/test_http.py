@@ -33,7 +33,7 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data['email'], user.email)
 
-    def user_can_log_out(self):
+    def test_user_can_log_out(self):
         user = create_user()
         self.client.login(username=user.email, password=PASSWORD)
         response = self.client.post(reverse('user:signout'))
