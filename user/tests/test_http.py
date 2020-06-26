@@ -6,6 +6,10 @@ from rest_framework.test import APITestCase
 PASSWORD = 'pAssw0rd!'
 
 
+def create_user(email='user@example.com', password=PASSWORD, **kwargs):
+    return get_user_model().objects.create_user(email, password, **kwargs)
+
+
 class AuthenticationTest(APITestCase):
 
     def test_user_can_sign_up(self):
@@ -21,3 +25,16 @@ class AuthenticationTest(APITestCase):
         self.assertEqual(response.data['id'], str(user.id))
         self.assertEqual(response.data['lastname'], user.lastname)
         self.assertEqual(response.data['firstname'], user.firstname)
+
+    def test_user_can_log_in(self):
+        user = create_user()
+        response = self.client.post(reverse('user:signin'), data={
+                                    'username': user.email, 'password': PASSWORD})
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data['email'], user.email)
+
+    def user_can_log_out(self):
+        user = create_user()
+        self.client.login(username=user.email, password=PASSWORD)
+        response = self.client.post(reverse('user:signout'))
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
