@@ -7,17 +7,22 @@ from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.contrib.auth import get_user_model, logout
 from rest_framework.settings import api_settings
 from rest_framework.response import Response
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.authtoken.views import ObtainAuthToken
 from django.utils.crypto import get_random_string
 from django_filters.rest_framework import DjangoFilterBackend
-from user.models import User, Token, TempUser, Follow, Profile
+from user.models import User, Token
 from user.permissions import IsAdmin
 from .serializers import (UserSerializer, RegisterVerifySerializer, AuthTokenSerializer, CustomObtainTokenPairSerializer,
                           PasswordResetChangeSerializer, PasswordResetSerializer, PasswordResetVerifySerializer)
+
+
+class SignUpView(generics.CreateAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
 
 
 class UserViewsets(viewsets.ModelViewSet):

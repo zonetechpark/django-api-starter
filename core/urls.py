@@ -29,7 +29,7 @@ schema_view = get_schema_view(
         contact=openapi.Contact(email="daniel.ale@zonetechpark.co"),
         license=openapi.License(name="BSD License"),
     ),
-    url='https://resumes-api.toptalent.io/api/v1/',
+    # url='https://resumes-api.toptalent.io/api/v1/',
     public=True,
     permission_classes=(permissions.AllowAny,),
 )
@@ -41,7 +41,6 @@ urlpatterns = [
                                                   cache_timeout=0), name='schema-swagger-ui'),
     url(r'^api/v1/api-redoc/$', schema_view.with_ui('redoc',
                                                     cache_timeout=0), name='schema-redoc'),
-    url(r'api/v1/accounts/', include('allauth.urls')),
     path('api/v1/api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
     path('api/v1/auth/', include('user.urls')),
