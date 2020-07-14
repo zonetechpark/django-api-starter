@@ -8,8 +8,6 @@ celerybeat-schedule
 .vscode/
 setup.cfg
 .env
-**/logs/**
-!**/logs
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
