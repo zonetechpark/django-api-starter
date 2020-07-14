@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  api:
+  api: &api
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
@@ -27,8 +27,9 @@ services:
     image: redis:alpine
 
   celery:
-    build: .
+    <<: *api
     command: celery worker --app=core --loglevel=info --logfile=logs/celery.log
+    ports: []
     volumes:
       - ./:/usr/src/app/
     env_file:
@@ -38,8 +39,9 @@ services:
       - api
 
   celery-beat:
-    build: .
+    <<: *api
     command: celery -A core beat -l info
+    ports: []
     volumes:
       - ./:/usr/src/app/
     env_file:
@@ -49,7 +51,7 @@ services:
       - celery
 
   dashboard:
-    build: .
+    <<: *api
     command: flower -A core --port=5555 --broker=redis://redis:6379/0
     ports:
       - 5555:5555
