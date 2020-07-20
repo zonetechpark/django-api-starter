@@ -1,5 +1,5 @@
 # Pull official base image 
-FROM python:3.8.2-alpine3.11
+FROM python:3.8-slim
 
 # Set working directory
 WORKDIR /usr/src/app
@@ -8,16 +8,15 @@ WORKDIR /usr/src/app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Install psycopg2 dependencies
-RUN apk update \ 
-    && apk add postgresql-dev gcc python3-dev musl-dev jpeg-dev zlib-dev \
-    && apk add --no-cache openssl-dev libffi-dev
+RUN apt-get update \ 
+    && apt-get install -y gcc python3-dev musl-dev libmagic1 libffi-dev 
 
 # Install dependencies
 RUN python -m pip install --upgrade pip
 RUN python -m pip install --upgrade Pillow
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt 
+RUN python -m pip install --upgrade pip
 
 # Copy entrypoint.sh
 COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
