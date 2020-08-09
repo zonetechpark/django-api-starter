@@ -22,11 +22,11 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="RESUMES V2 API",
+        title="Incubator.NG API",
         default_version='v1',
-        description="mAudition Application",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="daniel.ale@zonetechpark.co"),
+        description="Incubator.NG Application",
+        terms_of_service="https://incubator.ng/policies/terms/",
+        contact=openapi.Contact(email="danielale9291@gmail.com"),
         license=openapi.License(name="BSD License"),
     ),
     # url='https://resumes-api.toptalent.io/api/v1/',
