@@ -50,8 +50,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_filters',
     'user',
-
-
+    'community',
 ]
 
 MIDDLEWARE = [
