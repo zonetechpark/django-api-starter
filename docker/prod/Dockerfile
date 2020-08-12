@@ -1,8 +1,10 @@
 # Pull official base image 
 FROM python:3.8-slim
 
+COPY ./app /app
+
 # Set working directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Set env variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -14,15 +16,11 @@ RUN apt-get update \
 # Install dependencies
 RUN python -m pip install --upgrade pip
 RUN python -m pip install --upgrade Pillow
-COPY ./requirements.txt /usr/src/app/requirements.txt
-RUN pip install -r requirements.txt 
-RUN python -m pip install --upgrade pip
+RUN pip install -r /app/requirements/prod.txt 
 
 # Copy entrypoint.sh
-COPY ./entrypoint.sh /usr/src/app/entrypoint.sh
+COPY ./docker/dev/entrypoint.sh /entrypoint.sh
 
-# Copy Project
-COPY . /usr/src/app
-RUN chmod +x /usr/src/app/entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT [ "/usr/src/app/entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
