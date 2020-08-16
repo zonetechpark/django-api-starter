@@ -101,3 +101,13 @@ redis.exceptions.ConnectionError: Connection closed by server.
   warnings.warn('''Using settings.DEBUG leads to a memory
 [2020-08-12 12:48:14,171: INFO/MainProcess] celery@77a2ee31c8a3 ready.
 [2020-08-12 12:48:18,327: INFO/MainProcess] Events of group {task} enabled by remote.
+[2020-08-16 07:26:25,491: INFO/MainProcess] Connected to redis://redis:6379//
+[2020-08-16 07:26:25,507: INFO/MainProcess] mingle: searching for neighbors
+[2020-08-16 07:26:26,545: INFO/MainProcess] mingle: all alone
+[2020-08-16 07:26:26,574: INFO/MainProcess] celery@87a5caf2d4cb ready.
+[2020-08-16 07:26:30,861: INFO/MainProcess] Events of group {task} enabled by remote.
+[2020-08-16 07:44:07,597: INFO/MainProcess] Connected to redis://redis:6379//
+[2020-08-16 07:44:07,624: INFO/MainProcess] mingle: searching for neighbors
+[2020-08-16 07:44:08,656: INFO/MainProcess] mingle: all alone
+[2020-08-16 07:44:08,680: INFO/MainProcess] celery@88e0e08cd459 ready.
+[2020-08-16 07:44:12,618: INFO/MainProcess] Events of group {task} enabled by remote.
