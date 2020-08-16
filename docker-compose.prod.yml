@@ -73,4 +73,4 @@ services:
       - 8080:80
 
 volumes:
-  postgres_data:
+  postgres_data: ~
