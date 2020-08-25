@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import os
+import redis
 from celery.schedules import crontab
 import dj_database_url
 from decouple import config
@@ -26,9 +27,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yc_zvg#_m*$3rw1_ekj_4%n!rw65ev#h*0(7-x^4k8q38@m^wf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0',
                  '164.90.219.136', 'api.dev.incubator.ng']
 
 USE_X_FORWARDED_HOST = True
@@ -110,16 +111,20 @@ DATABASES = {
     }
 }
 
+REDIS_URL = os.getenv('REDIS_URL', "redis://redis:6379")
+
 CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": REDIS_URL,
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     }
 }
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -280,12 +285,12 @@ SWAGGER_SETTINGS = {
     },
 }
 
+
 TOKEN_LIFESPAN = 24  # hours
 CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379")
 CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379")
 FLOWER_BASIC_AUTH = os.environ.get('FLOWER_BASIC_AUTH')
 
-REDIS_URL = os.getenv('REDIS_URL', "redis://redis:6379")
 
 CHANNEL_LAYERS = {
     'default': {
@@ -293,8 +298,12 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             'hosts': [REDIS_URL],
         },
+        # 'ROUTING': 'core'
     },
 }
+
+
+# REDIS_DEFAULT_CONNECTION_POOL = redis.ConnectionPool.from_url(REDIS_URL)
 
 CELERY_BEAT_SCHEDULE = {
     # "sample_task": {

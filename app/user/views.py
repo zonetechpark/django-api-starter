@@ -15,10 +15,15 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.authtoken.views import ObtainAuthToken
 from django.utils.crypto import get_random_string
 from django_filters.rest_framework import DjangoFilterBackend
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from user.models import User, Token
 from user.permissions import IsAdmin
 from .serializers import (UserSerializer, RegisterVerifySerializer, AuthTokenSerializer, CustomObtainTokenPairSerializer,
                           PasswordResetChangeSerializer, PasswordResetSerializer, PasswordResetVerifySerializer)
+
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 class SignUpView(generics.CreateAPIView):
@@ -75,6 +80,16 @@ class UserViewsets(viewsets.ModelViewSet):
     def get_response_data(self, paginated_queryset):
         serializer = self.serializer_class(paginated_queryset, many=True)
         return serializer.data
+
+    @action(methods=['GET'], detail=False, url_path='user-list')
+    def user_list(self, request):
+        if 'users' in cache:
+            users = cache.get('users')
+            return Response(users, status=status.HTTP_200_OK)
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        cache.set('users', serializer.data, timeout=CACHE_TTL)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(methods=['POST'], detail=False, url_path='register/verification')
     def verify(self, request):

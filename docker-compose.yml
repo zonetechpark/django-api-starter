@@ -28,6 +28,8 @@ services:
 
   redis:
     image: redis:alpine
+    ports:
+      - "6379:6379"
 
   celery:
     <<: *api
@@ -64,6 +66,24 @@ services:
       - api
       - redis
       - celery
+
+  locust-master:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./app:/app
+    command: -f /app/locustfile.py --master -H http://localhost:8000
+    depends_on:
+      - api
+
+  locust-worker:
+    image: locustio/locust
+    volumes:
+      - ./app:/app/
+    command: -f /app/locustfile.py --worker --master-host locust-master
+    depends_on:
+      - api
 
 volumes:
   postgres_data: ~
