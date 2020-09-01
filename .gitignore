@@ -13,6 +13,7 @@ setup.cfg
 !**/migrations/__init__.py
 .DS_Store
 celerybeat.pid
+debug.log
 
 # Ignore DevSpace cache and log folder
 .devspace/
