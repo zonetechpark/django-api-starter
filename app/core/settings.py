@@ -29,8 +29,8 @@ SECRET_KEY = 'yc_zvg#_m*$3rw1_ekj_4%n!rw65ev#h*0(7-x^4k8q38@m^wf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0',
-                 '164.90.219.136', 'api.dev.incubator.ng']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1',
+                 '0.0.0.0', 'api.dev.staffingandco.com']
 
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -91,7 +91,7 @@ TEMPLATES = [
 AUTH_USER_MODEL = "user.User"
 WSGI_APPLICATION = 'core.wsgi.application'
 ASGI_APPLICATION = 'core.routing.application'
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Database
@@ -125,6 +125,8 @@ CACHES = {
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+LOGIN_URL = 'rest_framework:login'
+LOGOUT_URL = 'rest_framework:logout'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -247,7 +249,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'debug.log')
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log')
         },
     },
     'loggers': {
@@ -273,7 +275,6 @@ TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 TWILIO_NUMBER = os.environ.get("TWILIO_NUMBER")
 
 CLIENT_URL = os.environ.get('CLIENT_URL')
-BASE_URL = os.environ.get('BASE_URL')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
