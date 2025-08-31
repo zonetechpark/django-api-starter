@@ -15,3 +15,7 @@ setup.cfg
 celerybeat.pid
 app/debug.log
 app/logs/celery.log
+app/staticfiles/
+app/media/
+db.sqlite*
+**/**/logs/*

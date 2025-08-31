@@ -1,16 +1,16 @@
-version: "3.7"
+# version: "3.7"
 
 services:
   api: &api
     build:
       context: .
       dockerfile: docker/dev/Dockerfile
-    image: profmcdan/incubatorngapi
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8002
+    restart: always
     volumes:
       - ./app:/app
     ports:
-      - 8000:8000
+      - 8002:8002
     env_file:
       - ./.env
     depends_on:
@@ -18,22 +18,22 @@ services:
       - db
 
   db:
-    image: postgres:12.1-alpine
+    image: postgres:15-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
       - ./.env
     ports:
-      - 5432:5432
+      - 5434:5432
 
   redis:
     image: redis:alpine
-    ports:
-      - "6379:6379"
+    restart: always
 
   celery:
     <<: *api
-    command: celery worker --app=core --loglevel=info --logfile=logs/celery.log
+    command: celery -A core worker -l info
+    restart: always
     ports: []
     volumes:
       - ./app:/app
@@ -46,6 +46,7 @@ services:
   celery-beat:
     <<: *api
     command: celery -A core beat -l info
+    restart: always
     ports: []
     volumes:
       - ./app:/app
@@ -56,34 +57,16 @@ services:
       - celery
 
   dashboard:
-    <<: *api
-    command: flower -A core --port=5555 --broker=redis://redis:6379/0
+    image: mher/flower
+    command: celery flower --broker=redis://redis:6379/0
+    restart: always
     ports:
-      - 5555:5555
+      - 5557:5555
     env_file:
       - ./.env
     depends_on:
-      - api
       - redis
       - celery
-
-  locust-master:
-    image: locustio/locust
-    ports:
-      - "8089:8089"
-    volumes:
-      - ./app:/app
-    command: -f /app/locustfile.py --master -H http://localhost:8000
-    depends_on:
-      - api
-
-  locust-worker:
-    image: locustio/locust
-    volumes:
-      - ./app:/app/
-    command: -f /app/locustfile.py --worker --master-host locust-master
-    depends_on:
-      - api
 
 volumes:
   postgres_data: ~

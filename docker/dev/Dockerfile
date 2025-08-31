@@ -1,5 +1,5 @@
 # Pull official base image 
-FROM python:3.8-slim
+FROM python:3.12-alpine
 
 COPY ./app /app
 
@@ -10,8 +10,13 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update \ 
-    && apt-get install -y gcc python3-dev musl-dev libmagic1 libffi-dev 
+RUN apk update && apk add --no-cache \
+    gcc \
+    python3-dev \
+    musl-dev \
+    libmagic \
+    libffi-dev \
+    postgresql-dev
 
 # Install dependencies
 RUN python -m pip install --upgrade pip
@@ -20,6 +25,8 @@ RUN pip install -r /app/requirements/dev.txt
 
 # Copy entrypoint.sh
 COPY ./docker/dev/entrypoint.sh /entrypoint.sh
+
+EXPOSE 8002
 
 RUN chmod +x /entrypoint.sh
 

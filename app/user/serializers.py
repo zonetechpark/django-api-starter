@@ -3,7 +3,7 @@ import asyncio
 from django.core.files import File
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers, exceptions
 from django.utils.crypto import get_random_string
 from django.db import IntegrityError
